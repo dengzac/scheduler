@@ -52,7 +52,7 @@ function handleCRUD(api_endpoint, params){
 	});
 	router.put('/api/v1/' + api_endpoint + "/:id", async(req, res, next) => {
 		const id = req.params.id;
-		newParams = params.slice(1);
+		newParams = params;//params.slice(1);
 
 
 		var paramString = "";
