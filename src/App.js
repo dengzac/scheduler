@@ -8,11 +8,13 @@ import 'react-notifications/lib/notifications.css';
 import DepartmentList from "./components/DepartmentList";
 import CourseList from "./components/CourseList"
 import TeacherList from "./components/TeacherList"
+import CourseGrid from "./components/CourseGrid"
 const API_URL = window.location.href + "api/v1/";
 class App extends Component {
 	state = {
 		departments: [],
-		courses: []
+		courses: [],
+		blocks:[]
 	}
 
 	update = name => {
@@ -23,10 +25,19 @@ class App extends Component {
 		this.getDepartmentList();
 		this.getCourseList();
 		this.getTeacherList();
+		this.getBlockList();
 		//this.timer = setInterval(()=> this.getDepartmentList(), 5000);
 	}
 	componentWillUnmount() {
 		this.timer = null;
+	}
+	getBlockList(){
+		axios.get(API_URL + "blocks").then (res =>{
+			const newBlock = res.data.map (c => {
+				return {id: c.id, teacher: c.teacher_id, course: c.course_id, room: c.room, time: c.time}
+			});
+			this.setState({blocks: newBlock});
+		});
 	}
 	getTeacherList(){
 		axios.get(API_URL + "teachers")
@@ -66,7 +77,7 @@ class App extends Component {
 				departments: newDepartments
 			});
 			this.setState(newState);
-			console.log("Got response")
+			// console.log("Got response")
 		}).catch(error => console.log(error))
 	}
 	getCourseList(){
@@ -74,7 +85,7 @@ class App extends Component {
 		.then(response => {
 			const newCourses = response.data.map( c => {return {id: c.id, courseName: c.coursename, depId: c.department}});
 			this.setState({courses: newCourses});
-			console.log(newCourses)
+			// console.log(newCourses)
 		});
 	}
 	updateCourse(cellInfo, newVal){
@@ -83,7 +94,7 @@ class App extends Component {
 		delete newObj.depName;
 		newObj.department = newObj.depId;
 		delete newObj.depId;
-		console.log(newObj)
+		// console.log(newObj)
 		axios({url: API_URL + "courses/" + cellInfo.original.id, method: 'PUT', data: newObj}).then(res => {this.getCourseList();});
 	}
 	deleteCourse(id){
@@ -109,7 +120,7 @@ class App extends Component {
 	changeDepartmentChecked(index, isChecked){
 		console.log("Checkbox " + index + " " + isChecked);
 		var newArr = this.state.departments.slice();
-		console.log(this.state)
+		// console.log(this.state)
 		newArr[index].checked = isChecked;
 		this.setState({departments: newArr});
 	}
@@ -121,7 +132,8 @@ class App extends Component {
 			<DepartmentList departments={this.state.departments} onchecked={this.changeDepartmentChecked.bind(this)} onadd={this.addDepartment.bind(this)} ondelete={this.deleteDepartment.bind(this)} onchange={this.updateDepartment.bind(this)}/>
 			<CourseList url={API_URL + "upload/courses"} courses={this.state.courses} departments={this.state.departments} onchange={this.updateCourse.bind(this)} ondelete={this.deleteCourse.bind(this)} onadd={this.addCourse.bind(this)} ondone={this.getCourseList.bind(this)}/>
 			<TeacherList url={API_URL + "upload/teachers"} teachers={this.state.teachers} departments={this.state.departments} onchange={this.updateTeacher.bind(this)} onadd={this.addTeacher.bind(this)} ondelete={this.deleteTeacher.bind(this)} ondone={this.getTeacherList.bind(this)}/>
-			<NotificationContainer />
+			<CourseGrid  courses={this.state.courses} teachers={this.state.teachers} departments={this.state.departments} blocks={this.state.blocks}/>
+			<NotificationContainer/>
 			</div>
 			);
 	}

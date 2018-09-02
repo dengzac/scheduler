@@ -80,6 +80,7 @@ function handleCRUD(api_endpoint, params){
 }
 handleCRUD('departments', ["id", "name"]);
 handleCRUD('courses', ["id", "department", "coursename", "shortname"]);
+handleCRUD('blocks', ["id", "teacher_id", "course_id", "room", "time"])
 router.post('/api/v1/teachers', async (req, res, next) => {
 	const results = [];
 	const data = {name: req.param('name'), department: req.param('department')};
