@@ -4,13 +4,14 @@ const multer = require('multer')
 const bodyParser = require('body-parser')
 const xlsx = require('xlsx');
 const pg = require('pg');
-const connectionOptions =
-{
-	user: 'dbuser',
-	password: 'password',
-	host: 'localhost',
-	port: '5432',
-	database: 'scheduler'}
+const parse = require('pg-connection-string').parse;
+const connectionOptions = parse(process.env.DATABASE_URL || 'postgres://dbuser:password@localhost:5432/scheduler');
+// {
+// 	user: 'dbuser',
+// 	password: 'password',
+// 	host: 'localhost',
+// 	port: '5432',
+// 	database: 'scheduler'}
 const pool = new pg.Pool(connectionOptions);
 
 router.post('/api/v1/upload/courses', (req, res1, next) => {

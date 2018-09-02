@@ -3,13 +3,14 @@ const Router = require('express-promise-router');
 const router = new Router();
 const pg = require('pg')
 const path = require('path')
-const connectionOptions =
-{
-	user: 'dbuser',
-	password: 'password',
-	host: 'localhost',
-	port: '5432',
-	database: 'scheduler'}
+const parse = require('pg-connection-string').parse;
+const connectionOptions = parse(process.env.DATABASE_URL || 'postgres://dbuser:password@localhost:5432/scheduler');
+// {
+// 	user: 'dbuser',
+// 	password: 'password',
+// 	host: 'localhost',
+// 	port: '5432',
+// 	database: 'scheduler'}
 /* GET home page. */
 // router.get('/', function(req, res, next) {
 //   res.sendFile(path.join(__dirname, ))
