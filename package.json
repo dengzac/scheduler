@@ -5,7 +5,8 @@
   "scripts": {
     "start-express": "nodemon ./bin/www",
     "start": "concurrently --kill-others \"webpack-dev-server --mode development\" \"npm run start-express\"",
-    "build": "webpack --mode development && npm run start-express"
+    "build": "webpack --mode development && npm run start-express",
+	"heroku-postbuild": "npm install && npm install --only-dev && npm install && npm run build"
   },
   "dependencies": {
     "axios": "^0.18.0",
