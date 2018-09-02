@@ -97,6 +97,7 @@ class App extends Component {
 	updateDepartment(original, colName, newVal){
 		var newObj = Object.assign({}, original);
 		newObj[colName] = newVal
+		delete newObj.checked
 		axios({url: API_URL + "departments/" + original.id, method: 'PUT', data: newObj}).then(res => {this.getDepartmentList();});
 	}
 	deleteDepartment(id){
