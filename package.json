@@ -5,7 +5,7 @@
   "scripts": {
     "start-express": "nodemon ./bin/www",
     "start": "concurrently --kill-others \"webpack-dev-server --mode development\" \"npm run start-express\"",
-    "build": "concurrently --kill-others \"webpack --mode development\" \"npm run start-express\""
+    "build": "webpack --mode development && npm run start-express"
   },
   "dependencies": {
     "axios": "^0.18.0",

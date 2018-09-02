@@ -7,6 +7,7 @@ import 'react-notifications/lib/notifications.css';
 
 import DepartmentList from "./components/DepartmentList";
 import CourseList from "./components/CourseList"
+import TeacherList from "./components/TeacherList"
 const API_URL = window.location.href + "api/v1/";
 class App extends Component {
 	state = {
@@ -21,10 +22,32 @@ class App extends Component {
 	componentDidMount(){
 		this.getDepartmentList();
 		this.getCourseList();
+		this.getTeacherList();
 		//this.timer = setInterval(()=> this.getDepartmentList(), 5000);
 	}
 	componentWillUnmount() {
 		this.timer = null;
+	}
+	getTeacherList(){
+		axios.get(API_URL + "teachers")
+		.then (res => {
+			const newTeachers = res.data.map (c => {
+				return {id: c.id, name: c.lastname, depId: c.department}
+			});
+			this.setState({teachers: newTeachers});
+		})
+	}
+	updateTeacher(cellInfo, newVal){
+		var newObj = Object.assign({}, cellInfo.original);
+		newObj[cellInfo.column.id] = newVal;
+		newObj = {id: newObj.id, name: newObj.name, department: newObj.depId}
+		axios({url: API_URL + "teachers/" + cellInfo.original.id, method: "PUT", data: newObj}).then(res => this.getTeacherList());
+	}
+	deleteTeacher(id){
+		axios.delete(API_URL + "teachers/" + id).then(res => this.getTeacherList());
+	}
+	addTeacher(obj){
+		axios.post(API_URL + "teachers", obj).then(res => this.getTeacherList());
 	}
 	getDepartmentList(){
 		axios.get(API_URL + "departments")
@@ -96,6 +119,7 @@ class App extends Component {
 			</header>
 			<DepartmentList departments={this.state.departments} onchecked={this.changeDepartmentChecked.bind(this)} onadd={this.addDepartment.bind(this)} ondelete={this.deleteDepartment.bind(this)} onchange={this.updateDepartment.bind(this)}/>
 			<CourseList url={API_URL + "upload/courses"} courses={this.state.courses} departments={this.state.departments} onchange={this.updateCourse.bind(this)} ondelete={this.deleteCourse.bind(this)} onadd={this.addCourse.bind(this)} ondone={this.getCourseList.bind(this)}/>
+			<TeacherList url={API_URL + "upload/teachers"} teachers={this.state.teachers} departments={this.state.departments} onchange={this.updateTeacher.bind(this)} onadd={this.addTeacher.bind(this)} ondelete={this.deleteTeacher.bind(this)} ondone={this.getTeacherList.bind(this)}/>
 			<NotificationContainer />
 			</div>
 			);
