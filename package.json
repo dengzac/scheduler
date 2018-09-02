@@ -3,23 +3,31 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start-express": "node ./bin/www",
+    "start-express": "nodemon ./bin/www",
     "start": "concurrently --kill-others \"webpack-dev-server --mode development\" \"npm run start-express\"",
     "build": "concurrently --kill-others \"webpack --mode development\" \"npm run start-express\""
   },
   "dependencies": {
     "axios": "^0.18.0",
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "express-fileupload": "^0.4.0",
     "express-promise-router": "^3.0.3",
+    "file-loader": "^2.0.0",
+    "jquery": "^3.3.1",
     "morgan": "~1.9.0",
     "ms": "^2.1.1",
+    "multer": "^1.3.1",
     "pg": "^7.4.3",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-hot-loader": "^4.3.5"
+    "react-hot-loader": "^4.3.5",
+    "react-notifications": "^1.4.3",
+    "react-select": "^2.0.0",
+    "xlsx": "^0.13.5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

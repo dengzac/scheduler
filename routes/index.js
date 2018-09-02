@@ -20,8 +20,7 @@ async function getAll(pool, tableName, res){
 	pool.query('SELECT * FROM ' + tableName).then(
 		(res1) => {res.json((res1.rows))});	
 }
-const pool = new pg.Pool(connectionOptions
-	);
+const pool = new pg.Pool(connectionOptions);
 
 
 
@@ -48,13 +47,16 @@ function handleCRUD(api_endpoint, params){
 		await getAll(pool, api_endpoint, res);
 	});
 	router.get('/api/v1/' + api_endpoint, async(req, res, next) => {
-		pool.query('SELECT * FROM ' + api_endpoint).then((res1) => {res.json((res1.rows))});
+		pool.query('SELECT * FROM ' + api_endpoint).then((res1) => {console.log("Finish GET");res.json((res1.rows))});
 	});
 	router.put('/api/v1/' + api_endpoint + "/:id", async(req, res, next) => {
 		const id = req.params.id;
-		newParams = params;//params.slice(1);
-
-
+		var newParams = Object.keys(req.body)
+		var data = newParams.map((k) => req.body[k]);
+		//newParams = params;//params.slice(1);
+		console.log(req.body)
+		console.log(newParams)
+		console.log(data)
 		var paramString = "";
 		var data = [];
 		for (var i = 0; i<newParams.length; i++){
@@ -70,6 +72,7 @@ function handleCRUD(api_endpoint, params){
 	});
 	router.delete('/api/v1/' + api_endpoint + "/:id", async(req, res, next) => {
 		const id = req.params.id;
+		console.log("Delete " + id);
 		await pool.query('DELETE FROM ' + api_endpoint + " WHERE id=($1)", [id]);
 		await getAll(pool, api_endpoint, res);
 	})
