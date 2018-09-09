@@ -30,7 +30,7 @@ class TeacherList extends React.Component {
 	        }}
 
 	dangerouslySetInnerHTML={{
-		__html: this.props.teachers[cellInfo.index][cellInfo.column.id]
+		__html: this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index][cellInfo.column.id]
 	}} />
 
 				)
@@ -38,7 +38,7 @@ class TeacherList extends React.Component {
 		renderNonEditable(cellInfo){
 			return (<div style={{backgroundColor: "#fafafa"}}
 			dangerouslySetInnerHTML={{
-				__html: this.props.teachers[cellInfo.index][cellInfo.column.id]
+				__html: this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index][cellInfo.column.id]
 			}} />)
 		}
 	renderDelete(cellInfo){
@@ -66,14 +66,16 @@ class TeacherList extends React.Component {
 				cellInfo.column.id = 'depId'
 				this.props.onchange(cellInfo,e.target.value)
 			}}
-			 value={this.props.teachers[cellInfo.index].depId}>{items}</select> );
+			 value={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].depId}>{items}</select> );
 	}
 	render(){
+		console.log(this.props.departments)
 		return (
 		<div>
 		<h3>Teacher List</h3>
 		<ReactTable
-		data={this.props.teachers}
+		pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.length]}
+		data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
 		columns={[
 			{Header: "Department Name", accessor: "depName", Cell: this.renderSelect},
 			{Header: "Department Number", accessor: "depId", Cell: this.renderNonEditable},

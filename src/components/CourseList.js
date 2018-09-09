@@ -40,7 +40,7 @@ class CourseList extends React.Component {
 	renderNonEditable(cellInfo){
 		return (<div style={{backgroundColor: "#fafafa"}}
 		dangerouslySetInnerHTML={{
-			__html: this.getDisplayedData(this.props.courses)[cellInfo.index][cellInfo.column.id]
+			__html: this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))[cellInfo.index][cellInfo.column.id]
 		}} />)
 	}
 	getDisplayedData(courses){
@@ -88,15 +88,16 @@ class CourseList extends React.Component {
 				cellInfo.column.id = 'depId'
 				this.props.onchange(cellInfo,e.target.value)
 			}}
-			 value={this.props.courses[cellInfo.index].depId}>{items}</select> );
+			 value={this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].depId}>{items}</select> );
 	}
 	render(){
 		return (
-
+			
 			<div>
 			<h3>Course List</h3>
 			<ReactTable
-			data={this.getDisplayedData(this.props.courses)}
+			pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.courses.length]}
+			data={this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))}
 			columns={[
 				{Header: "Department Name", accessor: "depName", Cell: this.renderSelect},
 				{Header: "Department Number", accessor: "depId", Cell: this.renderNonEditable},

@@ -31,7 +31,11 @@ module.exports = {
 		proxy: {
 			"/api/v1" :{
 				changeOrigin: true,
-				target: "http://localhost:3000"}
+				target: "http://localhost:3000"},
+			"/auth": {
+				changeOrigin: true,
+				target: "http://localhost:3000"
+			}
 		},
 		contentBase: path.join(__dirname, "public/"),
 		port: 4000,

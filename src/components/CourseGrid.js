@@ -11,7 +11,7 @@ class CourseGrid extends React.Component {
 	renderNonEditable(cellInfo){
 		return (<div style={{backgroundColor: "#fafafa"}}
 		dangerouslySetInnerHTML={{
-			__html: this.props.teachers[cellInfo.index][cellInfo.column.id]
+			__html: this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index][cellInfo.column.id]
 		}} />)
 	}
 	renderDept(cellInfo){
@@ -19,7 +19,7 @@ class CourseGrid extends React.Component {
 		//console.log(this.props.teachers[cellInfo.index])
 		return (<div style={{backgroundColor: "#fafafa"}}
 			dangerouslySetInnerHTML={{
-				__html: this.props.departments.find(o => (o.id==this.props.teachers[cellInfo.index].depId)).name
+				__html: this.props.departments.find(o => (o.id==this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].depId)).name
 			}}/>)
 	}
 	renderBlock(cellInfo){
@@ -54,7 +54,8 @@ class CourseGrid extends React.Component {
 		}
 		return (
 			<div><ReactTable
-				data={this.props.teachers}
+				pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.length]}
+				data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
 				columns={cols}
 				className="-striped -highlight"
 			/></div>);
