@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-
+import ColorPicker from "./ColorPicker"
 import Select from 'react-select';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
@@ -14,6 +14,7 @@ class CourseList extends React.Component {
 		this.getDisplayedData = this.getDisplayedData.bind(this)
 		this.renderSelect = this.renderSelect.bind(this)
 		this.renderDelete = this.renderDelete.bind(this)
+		this.renderColor = this.renderColor.bind(this)
 	}
 
 		renderEditable(cellInfo){
@@ -32,7 +33,7 @@ class CourseList extends React.Component {
 	        }}
 
 	dangerouslySetInnerHTML={{
-		__html: this.getDisplayedData(this.props.courses)[cellInfo.index][cellInfo.column.id]
+		__html: this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))[cellInfo.index][cellInfo.column.id]
 	}} />
 
 				)
@@ -90,19 +91,28 @@ class CourseList extends React.Component {
 			}}
 			 value={this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].depId}>{items}</select> );
 	}
+	renderColor(cellInfo){
+		return (<ColorPicker />)
+	}
 	render(){
 		return (
 			
 			<div>
 			<h3>Course List</h3>
 			<ReactTable
-			pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.courses.length]}
+			pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 			data={this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))}
 			columns={[
 				{Header: "Department Name", accessor: "depName", Cell: this.renderSelect},
 				{Header: "Department Number", accessor: "depId", Cell: this.renderNonEditable},
 				{Header: "Course Code", accessor: "id", Cell: this.renderEditable},
 				{Header: "Course Name", accessor: "courseName", Cell: this.renderEditable},
+				{Header: "Short Name", accessor: "shortName", Cell: this.renderEditable},
+				{Header: "9th", accessor: "_9", Cell: this.renderEditable},
+				{Header: "10th", accessor: "_10", Cell: this.renderEditable},
+				{Header: "11th", accessor: "_11", Cell: this.renderEditable},
+				{Header: "12th", accessor: "_12", Cell: this.renderEditable},
+				{Header: "Color", Cell: this.renderColor},
 				{Header: "Delete", Cell: this.renderDelete}]
 				}
 			className="-striped -highlight"

@@ -30,12 +30,15 @@
     "pg": "^7.4.3",
     "pg-connection-string": "^2.0.0",
     "prop-types": "^15.6.2",
+    "randomcolor": "^0.5.3",
     "react": "^16.4.2",
+    "react-color": "^2.14.1",
     "react-dom": "^16.4.2",
     "react-hot-loader": "^4.3.5",
     "react-notifications": "^1.4.3",
     "react-select": "^2.0.0",
     "react-tabs": "^2.3.0",
+    "reactcss": "^1.2.3",
     "xlsx": "^0.13.5"
   },
   "devDependencies": {

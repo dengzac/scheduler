@@ -25,7 +25,7 @@ class CourseGrid extends React.Component {
 	renderBlock(cellInfo){
 		//console.log(this.props.blocks)
 		//console.log(cellInfo)
-		var options = this.props.courses.filter(o => o.depId == cellInfo.original.depId).map(o => ({value: o.id, label: o.courseName}));
+		var options = this.props.courses.filter(o => o.depId == cellInfo.original.depId).map(o => ({value: o.id, label: o.shortName}));
 		var items = [<option key={'-'} value={'-'}>-</option>];
 		for (var i = 0; i<options.length; i++){
 			items.push(<option key={options[i].value} value={options[i].value}>{options[i].label}</option>);
@@ -54,7 +54,7 @@ class CourseGrid extends React.Component {
 		}
 		return (
 			<div><ReactTable
-				pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.length]}
+				pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 				data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
 				columns={cols}
 				className="-striped -highlight"

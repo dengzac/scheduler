@@ -74,7 +74,7 @@ class TeacherList extends React.Component {
 		<div>
 		<h3>Teacher List</h3>
 		<ReactTable
-		pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.length]}
+		pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 		data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
 		columns={[
 			{Header: "Department Name", accessor: "depName", Cell: this.renderSelect},
