@@ -11,7 +11,7 @@ import CourseList from "./components/CourseList"
 import TeacherList from "./components/TeacherList"
 import CourseGrid from "./components/CourseGrid"
 import UserList from "./components/UserList"
-const API_URL = 'http://' + window.location.host + "/api/v1/"; 
+const API_URL = window.location.protocol + '//' + window.location.host + "/api/v1/"; 
 class App extends Component {
 	state = {
 		departments: [],
