@@ -28,7 +28,22 @@ const pool = new pg.Pool(connectionOptions);
 function handleCRUD(api_endpoint, params){
 	router.post('/api/v1/' + api_endpoint, async (req, res, next) => {
 		if (!checkUpdate(req)) res.status(403);
+		if (api_endpoint == "blocks"){
 
+			console.log(params);
+			console.log(req.body)
+			console.log(req.param('id'))
+			if (req.param('id')){
+				console.log("Update existing")
+				await pool.query(`UPDATE blocks SET course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND time=\'${req.param('time')}\'`);
+			}
+			else{
+				console.log(`INSERT INTO blocks (teacher_id, course_id, room, time) VALUES (\'${req.param('teacher_id')}\', \'${req.param('course_id')}\', \'${req.param('room')}\', \'${req.param('time')}\')`);
+				await pool.query(`INSERT INTO blocks (teacher_id, course_id, room, time) VALUES (\'${req.param('teacher_id')}\', \'${req.param('course_id')}\', \'${req.param('room')}\', \'${req.param('time')}\')`);
+			}
+			await getAll(pool, api_endpoint, res)
+			return;
+		}
 		var data = {};
 		var paramList = [];
 		for (var name in params){

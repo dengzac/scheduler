@@ -74,14 +74,7 @@ class App extends Component {
 	componentWillUnmount() {
 		this.timer = null;
 	}
-	getBlockList(){
-		axios.get(API_URL + "blocks").then (res =>{
-			const newBlock = res.data.map (c => {
-				return {id: c.id, teacher: c.teacher_id, course: c.course_id, room: c.room, time: c.time}
-			});
-			this.setState({blocks: newBlock});
-		});
-	}
+	
 	getTeacherList(){
 		axios.get(API_URL + "teachers")
 		.then (res => {
@@ -168,6 +161,19 @@ class App extends Component {
 		newArr[index].checked = isChecked;
 		this.setState({departments: newArr});
 	}
+	changeBlock(courseId, teacherId, time, room, id){
+		console.log('change block ' + id)
+		axios.post(API_URL + "blocks", {teacher_id: teacherId, course_id: courseId, room: room, time: time, id: id}).then(res => {this.getBlockList()});
+	}
+	getBlockList(){
+		axios.get(API_URL + "blocks").then (res =>{
+			const newBlock = res.data.map (c => {
+				return {id: c.id, teacher: c.teacher_id, course: c.course_id, room: c.room, time: c.time}
+			});
+			console.log(newBlock);
+			this.setState({blocks: newBlock});
+		});
+	}
 	render(){
 		return ( <div className="App">
 			<header className="App-header">
@@ -193,7 +199,7 @@ class App extends Component {
 				<TeacherList url={API_URL + "upload/teachers"} teachers={this.state.teachers} departments={this.state.departments} onchange={this.updateTeacher.bind(this)} onadd={this.addTeacher.bind(this)} ondelete={this.deleteTeacher.bind(this)} ondone={this.getTeacherList.bind(this)}/>
 				</TabPanel>
 				<TabPanel>
-				<CourseGrid  courses={this.state.courses} teachers={this.state.teachers} departments={this.state.departments} blocks={this.state.blocks}/>
+				<CourseGrid onchange={this.changeBlock.bind(this)} courses={this.state.courses} teachers={this.state.teachers} departments={this.state.departments} blocks={this.state.blocks}/>
 				</TabPanel>
 				<TabPanel>
 				<UserList onRoleChange={this.updateRoles.bind(this)} ondelete={this.deleteUser.bind(this)} userRoles={this.state.userRoles} users={this.state.users} departments={this.state.departments} roles={this.state.roles} onchange={this.updateUser.bind(this)} onsubmit={this.addUser.bind(this)}/>
