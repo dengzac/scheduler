@@ -46,7 +46,7 @@ class App extends Component {
 	getUser(){
 		axios.get(API_URL+"user").then(res => {
 			this.setState({user: res.data});
-		}).catch(err => {console.log(err);window.location.replace("login.html")})
+		}).catch(err => {console.log(err);debugger;window.location.replace("login.html")})
 	}
 	getUsers(){
 		axios.get(API_URL + "users").then (res => {
