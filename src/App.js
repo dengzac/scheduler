@@ -28,6 +28,7 @@ class App extends Component {
 	};
 
 	componentDidMount(){
+		this.getDatabaseUrl();
 		this.getUser();
 		this.getDepartmentList();
 		this.getCourseList();
@@ -174,6 +175,12 @@ class App extends Component {
 			this.setState({blocks: newBlock});
 		});
 	}
+	getDatabaseUrl(){
+		axios.get(API_URL + "database_url").then (res => {
+			console.log(res)
+			this.setState({database_url: res.data.url});
+		}).catch(err => {console.log('error getting url')});
+	}
 	render(){
 		return ( <div className="App">
 			<header className="App-header">
@@ -205,6 +212,9 @@ class App extends Component {
 				<UserList onRoleChange={this.updateRoles.bind(this)} ondelete={this.deleteUser.bind(this)} userRoles={this.state.userRoles} users={this.state.users} departments={this.state.departments} roles={this.state.roles} onchange={this.updateUser.bind(this)} onsubmit={this.addUser.bind(this)}/>
 				</TabPanel>
 			</Tabs>
+			<div>
+				{this.state.database_url ? <div>Database URL: <a href={this.state.database_url}>{this.state.database_url}</a></div> : ''}
+			</div>
 			<NotificationContainer/>
 			</div>
 			);

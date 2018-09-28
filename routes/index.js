@@ -200,6 +200,14 @@ router.get('/api/v1/roles', async (req, res, next) => {
 	await pool.query('SELECT * FROM roles WHERE ' + `EXISTS(SELECT users.* FROM users INNER JOIN user_role ON users.id=user_role.user_id AND users.email=\'${req.user.profile.emails[0].value}\' INNER JOIN roles ON roles.id=user_role.role_id INNER JOIN role_permissions ON role_permissions.role_id=roles.id INNER JOIN permissions ON permissions.id=role_permissions.permission_id AND permissions.name='view_permissions' GROUP BY users.id)`).then(r => res.json(r.rows));
 })
 
+router.get('/api/v1/database_url', async (req, res, next) => {
+	await pool.query(`SELECT 1 FROM users INNER JOIN user_role ON users.id=user_role.user_id AND users.email=\'${req.user.profile.emails[0].value}\' INNER JOIN roles ON roles.id=user_role.role_id AND roles.name='admin'`).then(r => {if (r.rows.length == 0){
+		res.status(403);
+		res.json({error: true})
+	} else {
+		res.json({url: process.env.DATABASE_URL || 'postgres://dbuser:password@localhost:5432/scheduler'});
+	}})
+})
 router.get('/api/v1/user_role', async (req, res, next) => {
 	var data = {};
 	await pool.query('SELECT id FROM users').then(async r => {
