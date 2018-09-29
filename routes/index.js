@@ -34,8 +34,14 @@ function handleCRUD(api_endpoint, params){
 			console.log(req.body)
 			console.log(req.param('id'))
 			if (req.param('id')){
-				console.log("Update existing")
-				await pool.query(`UPDATE blocks SET course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND time=\'${req.param('time')}\'`);
+				if (!req.param('course_id')){
+					console.log("Delete course");
+					await pool.query(`DELETE FROM blocks WHERE id=\'${req.param('id')}\'`);
+				}
+				else {
+					console.log("Update existing")
+					await pool.query(`UPDATE blocks SET course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND time=\'${req.param('time')}\'`);
+				}
 			}
 			else{
 				console.log(`INSERT INTO blocks (teacher_id, course_id, room, time) VALUES (\'${req.param('teacher_id')}\', \'${req.param('course_id')}\', \'${req.param('room')}\', \'${req.param('time')}\')`);
