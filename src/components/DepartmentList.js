@@ -72,7 +72,14 @@ dangerouslySetInnerHTML={{
 			<ReactTableResize
 			data={this.props.departments}
 			columns={[
-				{Header: "Show", accessor:"show", Cell: this.renderShow},
+				{Header: <input type="checkbox" onClick={e => {console.log(e.target.checked);if (true){var inputs = document.getElementsByTagName('input'); for (var i = 0; i<inputs.length; i++){
+					if (inputs[i].type == "checkbox" && inputs[i].name){
+						inputs[i].checked = e.target.checked;
+						console.log(inputs[i].nam)
+						this.handleInputChange({target: inputs[i], checked: inputs[i].checked});
+						
+					}
+				}};e.stopPropagation();}} />, accessor:"show", Cell: this.renderShow},
 				{Header: "ID", accessor: "id", Cell: this.renderEditable},
 				{Header: "Name", accessor: "name", Cell: this.renderEditable},
 				{Header: "Delete", accessor: "delete", Cell: this.renderDelete}]
