@@ -4,6 +4,7 @@ import "react-table/react-table.css";
 import ReactTableResize from "./ReactTableResize"
 import Select from 'react-select';
 import SemesterChoose from './SemesterChoose'
+import BlockOptions from "./BlockOptions"
 class CourseGrid extends React.Component {
 	constructor(props){
 		super(props);
@@ -11,7 +12,7 @@ class CourseGrid extends React.Component {
 		this.renderDept = this.renderDept.bind(this)
 		this.renderBlock = this.renderBlock.bind(this)
 		this.onBlockChange = this.onBlockChange.bind(this)
-		this.state = {semester: 3}
+		this.state = {semester: 3, properties: []}
 	}
 	renderNonEditable(cellInfo){
 		return (<div style={{backgroundColor: "#fafafa"}}
@@ -29,13 +30,20 @@ class CourseGrid extends React.Component {
 	}
 	onBlockChange(cellInfo, target, id){
 		var teacherId = this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].id;
-		var courseId = target.value;
-		//console.log("BlockChange " + courseId)
+		var courseId = target ? target.value : undefined;
+		console.log("BlockChange " + courseId)
+		debugger;
 		var time = cellInfo.column.block;
 		var room = 0;
-		this.props.onchange(courseId, teacherId, time, room, id);
+		var seats = 0;
+		this.props.onchange(courseId, teacherId, time, room, id, seats);
 
 		//var courseId = 
+	}
+	onBlockInfoChangeRoom(cellInfo, target, id){
+		var teacherId = this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].id;
+		var time = cellInfo.column.block;
+
 	}
 	renderBlock(cellInfo){
 		//console.log(this.props.blocks)
@@ -47,7 +55,9 @@ class CourseGrid extends React.Component {
 		}
 		//console.log(options)
 		var block =this.props.blocks.find(o => o.teacher == cellInfo.original.id && o.time == cellInfo.column.Header.slice(-1)); 
-		
+		// if (!this.state.properties[block]){
+		// 	this.setState({properties: (() =>{var a = this.state.properties.splice();a[block] = {}; return a})()});
+		// }
 		if (false){
 			console.log("Already selected" + block.course)
 			return <div><Select
@@ -61,7 +71,9 @@ class CourseGrid extends React.Component {
 			// }}/>;
 		}
 		else {
-			return <Select isClearable={true} defaultValue={block ? items.find(o => o.value===block.course) : undefined} options={items} onChange={e => {console.log(e);this.onBlockChange(cellInfo, e, block?block.id: undefined)}}></Select>
+			return (<div><BlockOptions defaultValue={block ? items.find(o => o.value===block.course) : undefined} items={items} onBlockChange={this.onBlockChange} cellInfo={cellInfo} block={block}></BlockOptions>
+				
+			</div>)
 		}
 	}
 	updateSemester(semester){

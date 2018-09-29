@@ -40,12 +40,12 @@ function handleCRUD(api_endpoint, params){
 				}
 				else {
 					console.log("Update existing")
-					await pool.query(`UPDATE blocks SET course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND time=\'${req.param('time')}\'`);
+					await pool.query(`UPDATE blocks SET seats=\'${req.param('seats')}\', course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND time=\'${req.param('time')}\'`);
 				}
 			}
 			else{
-				console.log(`INSERT INTO blocks (teacher_id, course_id, room, time) VALUES (\'${req.param('teacher_id')}\', \'${req.param('course_id')}\', \'${req.param('room')}\', \'${req.param('time')}\')`);
-				await pool.query(`INSERT INTO blocks (teacher_id, course_id, room, time) VALUES (\'${req.param('teacher_id')}\', \'${req.param('course_id')}\', \'${req.param('room')}\', \'${req.param('time')}\')`);
+				console.log(`INSERT INTO blocks (teacher_id, course_id, room, time, seats) VALUES (\'${req.param('teacher_id')}\', \'${req.param('course_id')}\', \'${req.param('room')}\', \'${req.param('time')}\', \'${req.param('seats')}\')`);
+				await pool.query(`INSERT INTO blocks (teacher_id, course_id, room, time, seats) VALUES (\'${req.param('teacher_id')}\', \'${req.param('course_id')}\', \'${req.param('room')}\', \'${req.param('time')}\', \'${req.param('seats')}\')`);
 			}
 			await getAll(pool, api_endpoint, res)
 			return;
@@ -145,7 +145,7 @@ function handleCRUD(api_endpoint, params){
 }
 handleCRUD('departments', ["id", "name"]);
 handleCRUD('courses', ["id", "department", "coursename", "shortname", "semester"]);
-handleCRUD('blocks', ["id", "teacher_id", "course_id", "room", "time"])
+handleCRUD('blocks', ["id", "teacher_id", "course_id", "room", "time", "seats"])
 handleCRUD('users', ['email']);
 router.post('/api/v1/teachers', async (req, res, next) => {
 	const results = [];

@@ -162,14 +162,14 @@ class App extends Component {
 		newArr[index].checked = isChecked;
 		this.setState({departments: newArr});
 	}
-	changeBlock(courseId, teacherId, time, room, id){
+	changeBlock(courseId, teacherId, time, room, id, seats){
 		console.log('change block ' + id)
-		axios.post(API_URL + "blocks", {teacher_id: teacherId, course_id: courseId, room: room, time: time, id: id}).then(res => {this.getBlockList()});
+		axios.post(API_URL + "blocks", {teacher_id: teacherId, course_id: courseId, room: room, time: time, id: id, seats: seats}).then(res => {this.getBlockList()});
 	}
 	getBlockList(){
 		axios.get(API_URL + "blocks").then (res =>{
 			const newBlock = res.data.map (c => {
-				return {id: c.id, teacher: c.teacher_id, course: c.course_id, room: c.room, time: c.time}
+				return {id: c.id, teacher: c.teacher_id, course: c.course_id, room: c.room, time: c.time, seats: c.seats}
 			});
 			//console.log(newBlock);
 			this.setState({blocks: newBlock});
