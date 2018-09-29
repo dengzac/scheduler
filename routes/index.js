@@ -144,7 +144,7 @@ function handleCRUD(api_endpoint, params){
 	})
 }
 handleCRUD('departments', ["id", "name"]);
-handleCRUD('courses', ["id", "department", "coursename", "shortname"]);
+handleCRUD('courses', ["id", "department", "coursename", "shortname", "semester"]);
 handleCRUD('blocks', ["id", "teacher_id", "course_id", "room", "time"])
 handleCRUD('users', ['email']);
 router.post('/api/v1/teachers', async (req, res, next) => {

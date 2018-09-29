@@ -65,7 +65,7 @@ dangerouslySetInnerHTML={{
 			<input type="checkbox" name={cellInfo.index} onChange={this.handleInputChange} checked={this.props.departments[cellInfo.index].checked}/>)
 	}
 	render(){
-		console.log('render')
+		//console.log('render')
 		return (
 			<div>
 			<h3>Departments</h3>
@@ -75,7 +75,7 @@ dangerouslySetInnerHTML={{
 				{Header: <input type="checkbox" onClick={e => {console.log(e.target.checked);if (true){var inputs = document.getElementsByTagName('input'); for (var i = 0; i<inputs.length; i++){
 					if (inputs[i].type == "checkbox" && inputs[i].name){
 						inputs[i].checked = e.target.checked;
-						console.log(inputs[i].nam)
+						//console.log(inputs[i].nam)
 						this.handleInputChange({target: inputs[i], checked: inputs[i].checked});
 						
 					}

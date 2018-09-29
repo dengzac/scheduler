@@ -64,3 +64,5 @@ typings/
 /public/uploads
 /dist
 *~*
+*.out
+*.tmp

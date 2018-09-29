@@ -24,7 +24,7 @@ class App extends Component {
 	}
 
 	update = name => {
-		console.log("Changed state");
+		//console.log("Changed state");
 	};
 
 	componentDidMount(){
@@ -41,13 +41,13 @@ class App extends Component {
 	getRoles(){
 		axios.get(API_URL+"roles").then(res => {
 			this.setState({roles: res.data});
-			console.log(res.data)
+			//console.log(res.data)
 		})
 	}
 	getUser(){
 		axios.get(API_URL+"user").then(res => {
 			this.setState({user: res.data});
-		}).catch(err => {console.log(err);debugger;window.location.replace("login.html")})
+		}).catch(err => {console.log(err);window.location.replace("login.html")})
 	}
 	getUsers(){
 		axios.get(API_URL + "users").then (res => {
@@ -120,7 +120,7 @@ class App extends Component {
 	getCourseList(){
 		axios.get(API_URL + "courses")
 		.then(response => {
-			const newCourses = response.data.map( c => {return {id: c.id, courseName: c.coursename, depId: c.department, shortName: c.shortname, _9: c._9, _10: c._10, _11: c._11, _12: c._12}});
+			const newCourses = response.data.map( c => {return {semester: c.semester, id: c.id, courseName: c.coursename, depId: c.department, shortName: c.shortname, _9: c._9, _10: c._10, _11: c._11, _12: c._12}});
 			this.setState({courses: newCourses});
 			// console.log(newCourses)
 		});
@@ -171,13 +171,13 @@ class App extends Component {
 			const newBlock = res.data.map (c => {
 				return {id: c.id, teacher: c.teacher_id, course: c.course_id, room: c.room, time: c.time}
 			});
-			console.log(newBlock);
+			//console.log(newBlock);
 			this.setState({blocks: newBlock});
 		});
 	}
 	getDatabaseUrl(){
 		axios.get(API_URL + "database_url").then (res => {
-			console.log(res)
+			//console.log(res)
 			this.setState({database_url: res.data.url});
 		}).catch(err => {console.log('error getting url')});
 	}

@@ -90,7 +90,11 @@ class TeacherList extends React.Component {
 
 		/>
 		<br />
+		<h3>Add Teacher</h3>
 		<TeacherAdd onsubmit={this.props.onadd} departments={this.props.departments} onsubmit={this.props.onadd}/>
+		<h3>Import from Excel</h3>
+		<img src="images/TeacherList.png"></img>
+		<p>The above columns, including headers, are required but may be in any order. Other columns will be ignored. Refer to the Departments tab for department numbers.</p>
 		<FileUpload url={this.props.url} ondone={this.props.ondone}/>
 		</div>);
 	}

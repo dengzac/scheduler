@@ -3,7 +3,7 @@ import $ from 'jquery';
 class CourseAdd extends React.Component {
 	constructor(props){
 		super(props);
-		this.state = {id: '', coursename: '', department: -1};
+		this.state = {id: '', coursename: '', department: -1, semester: 3};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,7 +27,7 @@ class CourseAdd extends React.Component {
 		console.log('submit');
 
 		this.props.onsubmit(this.state);
-		this.setState({id: '', coursename: '', department: -1})
+		this.setState({id: '', coursename: '', department: -1, semester: 3})
 	}
 	render(){
 		var options = this.props.departments.map((obj) => {return {value: obj.id+'', label: obj.name}});
@@ -39,7 +39,8 @@ class CourseAdd extends React.Component {
 
 		return (
 			<form onSubmit={this.handleSubmit}>
-			<select name="department" value={this.state.department} onChange={this.handleChange}>{items}</select>
+			<h3>Add Course</h3>
+			<select name="department" value={this.state.department} onChange={this.handleChange}>{items}</select> &nbsp;
 			<label>
 				Course Code:
 				<input
@@ -52,6 +53,9 @@ class CourseAdd extends React.Component {
 				<input name='coursename'
 				onChange={this.handleChange} value={this.state.coursename}/>
 			</label>
+			<br/>
+			Fall: <input type="checkbox" checked={Math.floor(this.state.semester % 2)==1} onChange={() => {console.log(this.state.semester);this.setState({semester: this.state.semester ^ 1})}} />
+			&nbsp; Spring:<input type="checkbox" checked={Math.floor(this.state.semester /2)%2==1} onChange={() => {console.log(this.state.semester);this.setState({semester: this.state.semester ^ 2})}} />
 			<input type="submit" value="Add"/>
 			</form>);
 

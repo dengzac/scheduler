@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bootbox": "^4.4.0",
     "connect-pg-simple": "^5.0.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
@@ -33,6 +34,7 @@
     "randomcolor": "^0.5.3",
     "react": "^16.4.2",
     "react-color": "^2.14.1",
+    "react-confirm-alert": "^2.0.6",
     "react-dom": "^16.4.2",
     "react-hot-loader": "^4.3.5",
     "react-notifications": "^1.4.3",

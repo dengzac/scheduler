@@ -3,7 +3,7 @@ import ColorPicker from "./ColorPicker"
 import Select from 'react-select';
 import ReactTable from "react-table";
 import ReactTableResize from "./ReactTableResize"
-
+import SemesterChoose from "./SemesterChoose"
 import "react-table/react-table.css";
 
 import CourseAdd from './CourseAdd'
@@ -17,6 +17,9 @@ class CourseList extends React.Component {
 		this.renderSelect = this.renderSelect.bind(this)
 		this.renderDelete = this.renderDelete.bind(this)
 		this.renderColor = this.renderColor.bind(this)
+		this.renderCheck = this.renderCheck.bind(this)
+		this.getFilteredCourses = this.getFilteredCourses.bind(this)
+		this.state = {semester: 3};
 	}
 
 		renderEditable(cellInfo){
@@ -35,7 +38,7 @@ class CourseList extends React.Component {
 	        }}
 
 	dangerouslySetInnerHTML={{
-		__html: this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))[cellInfo.index][cellInfo.column.id]
+		__html: this.getDisplayedData(this.getFilteredCourses())[cellInfo.index][cellInfo.column.id]
 	}} />
 
 				)
@@ -43,8 +46,13 @@ class CourseList extends React.Component {
 	renderNonEditable(cellInfo){
 		return (<div style={{backgroundColor: "#fafafa"}}
 		dangerouslySetInnerHTML={{
-			__html: this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))[cellInfo.index][cellInfo.column.id]
+			__html: this.getDisplayedData(this.getFilteredCourses())[cellInfo.index][cellInfo.column.id]
 		}} />)
+	}
+	getFilteredCourses(){
+		//console.log("Chosen filter: " + this.state.semester);
+		//console.log(this.props.courses.filter(o =>  this.props.departments.find(a => a.id==o.depId).checked && ((o.semester & this.state.semester) > 0)).length)
+		return this.props.courses.filter(o =>  this.props.departments.find(a => a.id==o.depId).checked && ((o.semester & this.state.semester) > 0))
 	}
 	getDisplayedData(courses){
 		var arr = [];
@@ -91,20 +99,44 @@ class CourseList extends React.Component {
 				cellInfo.column.id = 'depId'
 				this.props.onchange(cellInfo,e.target.value)
 			}}
-			 value={this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].depId}>{items}</select> );
+			 value={this.getFilteredCourses()[cellInfo.index].depId}>{items}</select> );
+	}
+	renderCheck(cellInfo){
+		var semester = this.getDisplayedData(this.getFilteredCourses())[cellInfo.index].semester;
+		//console.log("Semester: " + semester);
+		if (cellInfo.column.id == "fall"){
+			return (<input type="checkbox" checked={Math.floor( semester % 2)==1} onChange={() => {var newVal = semester ^ 1;
+	          var oldId = cellInfo.original.id;
+	          var colName = cellInfo.column.id;
+	          cellInfo.column.id = "semester";
+	          this.props.onchange(cellInfo, newVal)
+	          }} />)
+		}else {
+					return (<input type="checkbox" checked={Math.floor( semester/2) % 2==1} onChange={() => {var newVal = semester ^ 2;
+			          var oldId = cellInfo.original.id;
+			          var colName = cellInfo.column.id;
+			          cellInfo.column.id = "semester";
+			          this.props.onchange(cellInfo, newVal)
+			          }} />)
+		}
 	}
 	renderColor(cellInfo){
 		return (<ColorPicker />)
+	}
+	updateSemester(semester){
+		this.setState({semester: semester});
+		this.forceUpdate();
 	}
 	render(){
 		return (
 			
 			<div>
 			<h3>Course List</h3>
+			<SemesterChoose updateSemester={this.updateSemester.bind(this)}/>
 			<ReactTableResize
 			saveName="CourseList"
-			pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
-			data={this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))}
+			pageSizeOptions={[5, 10, 20, 25, 50, 100, this.getFilteredCourses().length]}
+			data={this.getDisplayedData(this.getFilteredCourses())}
 			columns={[
 				{Header: "Department Name", accessor: "depName", Cell: this.renderSelect},
 				{Header: "Department Number", accessor: "depId", Cell: this.renderNonEditable},
@@ -115,6 +147,8 @@ class CourseList extends React.Component {
 				{Header: "10th", accessor: "_10", Cell: this.renderEditable},
 				{Header: "11th", accessor: "_11", Cell: this.renderEditable},
 				{Header: "12th", accessor: "_12", Cell: this.renderEditable},
+				{Header: "Fall", accessor: "fall", Cell: this.renderCheck},
+				{Header: "Spring", accessor: "spring", Cell: this.renderCheck},
 				{Header: "Color", accessor: "color", Cell: this.renderColor},
 				{Header: "Delete", accessor: "delete", Cell: this.renderDelete}]
 				}
@@ -123,6 +157,9 @@ class CourseList extends React.Component {
 			/>
 			<br />
 			<CourseAdd onsubmit={this.props.onadd} departments={this.props.departments}/>
+			<h3> Import from Excel </h3>
+			<img src="images/CourseList.png"></img>
+			<p>The above columns, including headers, are required but may be in any order. Other columns will be ignored. For the semester value, 1=Fall only, 2=Spring only, 3=Fall and Spring</p>
 			<FileUpload url={this.props.url} ondone={this.props.ondone}/>
 			</div>
 			)

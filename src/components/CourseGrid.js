@@ -3,7 +3,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import ReactTableResize from "./ReactTableResize"
 import Select from 'react-select';
-
+import SemesterChoose from './SemesterChoose'
 class CourseGrid extends React.Component {
 	constructor(props){
 		super(props);
@@ -11,6 +11,7 @@ class CourseGrid extends React.Component {
 		this.renderDept = this.renderDept.bind(this)
 		this.renderBlock = this.renderBlock.bind(this)
 		this.onBlockChange = this.onBlockChange.bind(this)
+		this.state = {semester: 3}
 	}
 	renderNonEditable(cellInfo){
 		return (<div style={{backgroundColor: "#fafafa"}}
@@ -29,7 +30,7 @@ class CourseGrid extends React.Component {
 	onBlockChange(cellInfo, target, id){
 		var teacherId = this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].id;
 		var courseId = target.value;
-		console.log("BlockChange " + courseId)
+		//console.log("BlockChange " + courseId)
 		var time = cellInfo.column.block;
 		var room = 0;
 		this.props.onchange(courseId, teacherId, time, room, id);
@@ -63,6 +64,10 @@ class CourseGrid extends React.Component {
 			return <Select isClearable={true} defaultValue={block ? items.find(o => o.value===block.course) : undefined} options={items} onChange={e => {console.log(e);this.onBlockChange(cellInfo, e, block?block.id: undefined)}}></Select>
 		}
 	}
+	updateSemester(semester){
+		this.setState({semester: semester});
+		this.forceUpdate();
+	}
 	render(){
 		var cols = [{Header:'Dept', accessor: 'depId', Cell: this.renderDept},
 					{Header:'Teacher', accessor: 'name', Cell: this.renderNonEditable}]
@@ -70,7 +75,7 @@ class CourseGrid extends React.Component {
 			cols.push({Header:"Block " + i, Cell: this.renderBlock, block: i});
 		}
 		return (
-			<div><ReactTableResize
+			<div><SemesterChoose updateSemester={this.updateSemester.bind(this)}/><ReactTableResize
 				saveName="CourseGrid"
 				pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 				data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
