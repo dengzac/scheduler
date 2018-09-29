@@ -3,6 +3,8 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Select from 'react-select';
 import UserAdd from './UserAdd';
+import ReactTableResize from "./ReactTableResize"
+
 class UserList extends React.Component {
 	constructor(){
 		super();
@@ -70,14 +72,15 @@ class UserList extends React.Component {
 		return (
 			<div>
 
-			<ReactTable
+			<ReactTableResize
+			saveName="UserList"
 			style={{overflow: 'visible'}}
 			data={this.props.users}
 			columns={[
 				{Header: "id", accessor: "id", Cell: this.renderNonEditable},
 				{Header: "Email", accessor: "email", Cell: this.renderEditable},
-				{Header: "Roles", Cell: this.renderSelect},
-				{Header: "Delete", Cell: this.renderDelete}]
+				{Header: "Roles", accessor: "roles", Cell: this.renderSelect},
+				{Header: "Delete", accessor: "delete", Cell: this.renderDelete}]
 				}
 			/>
 			<UserAdd onsubmit={this.props.onsubmit} />

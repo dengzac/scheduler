@@ -2,6 +2,8 @@ import React, {Component} from "react"
 import ColorPicker from "./ColorPicker"
 import Select from 'react-select';
 import ReactTable from "react-table";
+import ReactTableResize from "./ReactTableResize"
+
 import "react-table/react-table.css";
 
 import CourseAdd from './CourseAdd'
@@ -99,7 +101,8 @@ class CourseList extends React.Component {
 			
 			<div>
 			<h3>Course List</h3>
-			<ReactTable
+			<ReactTableResize
+			saveName="CourseList"
 			pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 			data={this.getDisplayedData(this.props.courses.filter(o => this.props.departments.find(a => a.id==o.depId).checked))}
 			columns={[
@@ -112,8 +115,8 @@ class CourseList extends React.Component {
 				{Header: "10th", accessor: "_10", Cell: this.renderEditable},
 				{Header: "11th", accessor: "_11", Cell: this.renderEditable},
 				{Header: "12th", accessor: "_12", Cell: this.renderEditable},
-				{Header: "Color", Cell: this.renderColor},
-				{Header: "Delete", Cell: this.renderDelete}]
+				{Header: "Color", accessor: "color", Cell: this.renderColor},
+				{Header: "Delete", accessor: "delete", Cell: this.renderDelete}]
 				}
 			className="-striped -highlight"
 

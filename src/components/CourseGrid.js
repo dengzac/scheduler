@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import ReactTableResize from "./ReactTableResize"
+
 class CourseGrid extends React.Component {
 	constructor(props){
 		super(props);
@@ -64,7 +66,8 @@ class CourseGrid extends React.Component {
 			cols.push({Header:"Block " + i, Cell: this.renderBlock, block: i});
 		}
 		return (
-			<div><ReactTable
+			<div><ReactTableResize
+				saveName="CourseGrid"
 				pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 				data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
 				columns={cols}

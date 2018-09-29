@@ -5,6 +5,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 
 import DepartmentAdd from "./DepartmentAdd"
+import ReactTableResize from "./ReactTableResize"
 class DepartmentList extends React.Component {
 
 	constructor(props){
@@ -68,13 +69,13 @@ dangerouslySetInnerHTML={{
 		return (
 			<div>
 			<h3>Departments</h3>
-			<ReactTable
+			<ReactTableResize
 			data={this.props.departments}
 			columns={[
-				{Header: "Show", Cell: this.renderShow},
+				{Header: "Show", accessor:"show", Cell: this.renderShow},
 				{Header: "ID", accessor: "id", Cell: this.renderEditable},
 				{Header: "Name", accessor: "name", Cell: this.renderEditable},
-				{Header: "Delete", Cell: this.renderDelete}]
+				{Header: "Delete", accessor: "delete", Cell: this.renderDelete}]
 				}
 			className="-striped -highlight"
 			showPagination={false}

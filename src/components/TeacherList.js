@@ -4,6 +4,8 @@ import "react-table/react-table.css";
 
 import TeacherAdd from "./TeacherAdd"
 import FileUpload from "./FileUpload"
+import ReactTableResize from "./ReactTableResize"
+
 class TeacherList extends React.Component {
 	constructor(){
 		super()
@@ -73,7 +75,8 @@ class TeacherList extends React.Component {
 		return (
 		<div>
 		<h3>Teacher List</h3>
-		<ReactTable
+		<ReactTableResize
+		saveName="TeacherList"
 		pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 		data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
 		columns={[
@@ -81,7 +84,7 @@ class TeacherList extends React.Component {
 			{Header: "Department Number", accessor: "depId", Cell: this.renderNonEditable},
 			{Header: "Teacher id", accessor: "id", Cell: this.renderNonEditable},
 			{Header: "Name", accessor: "name", Cell: this.renderEditable},
-			{Header: "Delete", Cell: this.renderDelete}]
+			{Header: "Delete", accessor: "delete", Cell: this.renderDelete}]
 			}
 		className="-striped -highlight"
 
