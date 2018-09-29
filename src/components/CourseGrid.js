@@ -2,6 +2,7 @@ import React from 'react';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import ReactTableResize from "./ReactTableResize"
+import Select from 'react-select';
 
 class CourseGrid extends React.Component {
 	constructor(props){
@@ -27,7 +28,7 @@ class CourseGrid extends React.Component {
 	}
 	onBlockChange(cellInfo, target, id){
 		var teacherId = this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].id;
-		var courseId = target.options[target.selectedIndex].value;
+		var courseId = target.value;
 		var time = cellInfo.column.block;
 		var room = 0;
 		this.props.onchange(courseId, teacherId, time, room, id);
@@ -38,25 +39,26 @@ class CourseGrid extends React.Component {
 		//console.log(this.props.blocks)
 		//console.log(cellInfo)
 		var options = this.props.courses.filter(o => o.depId == cellInfo.original.depId).map(o => ({value: o.id, label: o.shortName}));
-		var items = [<option key={'-'} value={'-'}>-</option>];
+		var items = [];
 		for (var i = 0; i<options.length; i++){
-			items.push(<option key={options[i].value} value={options[i].value}>{options[i].label}</option>);
+			items.push({value: options[i].value, label: options[i].label});
 		}
 		//console.log(options)
 		var block =this.props.blocks.find(o => o.teacher == cellInfo.original.id && o.time == cellInfo.column.Header.slice(-1)); 
 		
 		if (block){
 			console.log("Already selected" + block.course)
-			return <div><select
-			value={block.course}
-			onChange={e => {this.onBlockChange(cellInfo, e.target, block.id);}}>{items}</select><input></input></div>
+			return <div><Select
+			value={items.find(o => o.value===block.course)}
+			options={items}
+			onChange={e => {console.log(e);this.onBlockChange(cellInfo, e, block.id);}}></Select><input></input></div>
 			// return <div style={{backgroundColor: "#fafafa"}}
 			// dangerouslySetInnerHTML={{
 			// 	__html: block.course
 			// }}/>;
 		}
 		else {
-			return <select onChange={e => {this.onBlockChange(cellInfo, e.target)}}>{items}</select>
+			return <Select options={items} onChange={e => {console.log(e);this.onBlockChange(cellInfo, e)}}></Select>
 		}
 	}
 	render(){
