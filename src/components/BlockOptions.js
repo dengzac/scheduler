@@ -4,10 +4,20 @@ import Select from "react-select";
 class BlockOptions extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { room: 0, seats: 0 };
+    this.state = { course: props.defaultValue ? props.defaultValue.value : undefined, room: this.props.block ? this.props.block.room : 0, seats: this.props.block ? this.props.block.seats : 0 };
+    this.onChange = this.onChange.bind(this);
     console.log("Blockoptions "+ JSON.stringify(this.props.block))
+    console.log(this.state.course)
   }
 
+  onChange(){
+    this.props.onBlockChange(
+      this.props.cellInfo,
+      this.state.course,
+      this.props.block ? this.props.block.id : undefined,
+      this.state.room,
+      this.state.seats);
+  }
   render() {
     return (
       <div>
@@ -15,13 +25,13 @@ class BlockOptions extends React.Component {
           isClearable={true}
           defaultValue={this.props.defaultValue}
           options={this.props.items}
-          onChange={e => {
-            this.props.onBlockChange(
+          onChange={e => {debugger;console.log(e.value);console.log(this.props.courses.filter(o => {o.id==e.value}));this.setState({course: e ? e.value : undefined, seats: e ? this.props.courses.filter(o => {return o.id==e.value})[0].seatsPerSection : 0}, this.onChange)}}
+           /* this.props.onBlockChange(
               this.props.cellInfo,
               e,
               this.props.block ? this.props.block.id : undefined
             );
-          }}
+          }}*/
         />
         {this.props.block ? (
           <div>
@@ -29,7 +39,7 @@ class BlockOptions extends React.Component {
               size="5"
               placeholder="Room"
               value={this.state.room}
-              onChange={e => this.setState({ room: e.target.value })}
+              onChange={e => this.setState({ room: e.target.value }, this.onChange)}
             />
             &nbsp;
             <input
@@ -37,9 +47,9 @@ class BlockOptions extends React.Component {
               placeholder="Seats"
               value={this.state.seats}
               onChange={e =>
-                this.setState({
+               {debugger; this.setState({
                   seats: e.target.value
-                })
+                }, this.onChange)}
               }
             />
           </div>

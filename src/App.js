@@ -120,7 +120,7 @@ class App extends Component {
 	getCourseList(){
 		axios.get(API_URL + "courses")
 		.then(response => {
-			const newCourses = response.data.map( c => {return {sections: c.sections, semester: c.semester, id: c.id, courseName: c.coursename, depId: c.department, shortName: c.shortname, _9: c._9, _10: c._10, _11: c._11, _12: c._12}});
+			const newCourses = response.data.map( c => {return {sections: c.sections, semester: c.semester, id: c.id, courseName: c.coursename, depId: c.department, shortName: c.shortname, _9: c._9, _10: c._10, _11: c._11, _12: c._12, seatsPerSection: Math.ceil((c._9 + c._10 + c._11 + c._12)/c.sections)}});
 			this.setState({courses: newCourses});
 			// console.log(newCourses)
 		});

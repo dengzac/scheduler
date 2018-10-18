@@ -28,23 +28,19 @@ class CourseGrid extends React.Component {
 				__html: this.props.departments.find(o => (o.id==this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].depId)).name
 			}}/>)
 	}
-	onBlockChange(cellInfo, target, id){
+	onBlockChange(cellInfo, target, id, room, seats){
 		var teacherId = this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].id;
-		var courseId = target ? target.value : undefined;
+		var courseId = target;// ? target.value : undefined;
 		console.log("BlockChange " + courseId)
 		debugger;
 		var time = cellInfo.column.block;
-		var room = 0;
-		var seats = 0;
+
+
 		this.props.onchange(courseId, teacherId, time, room, id, seats);
 
 		//var courseId = 
 	}
-	onBlockInfoChangeRoom(cellInfo, target, id){
-		var teacherId = this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].id;
-		var time = cellInfo.column.block;
 
-	}
 	renderBlock(cellInfo){
 		//console.log(this.props.blocks)
 		//console.log(cellInfo)
@@ -71,7 +67,7 @@ class CourseGrid extends React.Component {
 			// }}/>;
 		}
 		else {
-			return (<div><BlockOptions defaultValue={block ? items.find(o => o.value===block.course) : undefined} items={items} onBlockChange={this.onBlockChange} cellInfo={cellInfo} block={block}></BlockOptions>
+			return (<div><BlockOptions defaultValue={block ? items.find(o => o.value===block.course) : undefined} items={items} onBlockChange={this.onBlockChange} cellInfo={cellInfo} block={block} courses={this.props.courses}></BlockOptions>
 				
 			</div>)
 		}

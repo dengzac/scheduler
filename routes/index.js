@@ -39,7 +39,7 @@ function handleCRUD(api_endpoint, params){
 					await pool.query(`DELETE FROM blocks WHERE id=\'${req.param('id')}\'`);
 				}
 				else {
-					console.log("Update existing")
+					console.log("Update existing " + req.param('course_id'));
 					await pool.query(`UPDATE blocks SET seats=\'${req.param('seats')}\', course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND time=\'${req.param('time')}\'`);
 				}
 			}
