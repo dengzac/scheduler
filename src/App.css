@@ -8,6 +8,9 @@
 .Select-menu-outer {
   z-index: 999 !important;
 }
+.Select {
+	padding: 5px;
+}
 .rt-td {
 	overflow: visible !important;
 }

@@ -5,6 +5,7 @@ import ReactTableResize from "./ReactTableResize"
 import Select from 'react-select';
 import SemesterChoose from './SemesterChoose'
 import BlockOptions from "./BlockOptions"
+import "../App.css"
 class CourseGrid extends React.Component {
 	constructor(props){
 		super(props);

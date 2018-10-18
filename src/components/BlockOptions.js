@@ -20,7 +20,7 @@ class BlockOptions extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: this.state.course ? "#" + this.props.courses.filter(o => {return o.id==this.state.course})[0].color : "", padding: '10px'}}>
         <Select
           isClearable={true}
           defaultValue={this.props.defaultValue}
