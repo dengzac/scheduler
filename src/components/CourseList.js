@@ -8,6 +8,7 @@ import "react-table/react-table.css";
 
 import CourseAdd from './CourseAdd'
 import FileUpload from "./FileUpload"
+const Rainbow = require('rainbowvis.js');
 class CourseList extends React.Component {
 	constructor(props){
 		super(props);
@@ -122,7 +123,7 @@ class CourseList extends React.Component {
 		}
 	}
 	renderColor(cellInfo){
-		return (<ColorPicker />)
+		return (<ColorPicker color={this.getDisplayedData(this.getFilteredCourses())[cellInfo.index].color} onchange={(newVal) => this.props.onchange(cellInfo, newVal)}/>);
 	}
 	renderSeats(cellInfo){
 		return <div>{Math.ceil((cellInfo.original._9 + cellInfo.original._10 + cellInfo.original._11 + cellInfo.original._12)/cellInfo.original.sections)}</div>
@@ -131,12 +132,31 @@ class CourseList extends React.Component {
 		this.setState({semester: semester});
 		this.forceUpdate();
 	}
+	updateColors(){
+		var c = this.getFilteredCourses();
+		var rainbow = new Rainbow();
+		for (var i = 0; i<c.length; i++){
+			var avg = (c[i]._9 * 9 + c[i]._10 * 10 + c[i]._11 * 11 + c[i]._12 * 12)/(c[i]._9 + c[i]._10 + c[i]._11 + c[i]._12);
+			if (isNaN(avg)){
+				avg = 9
+			}
+			var color = rainbow.colourAt((avg-9) * 100/3);
+			console.log(c[i]);
+			console.log((avg-9)*100/3)
+			c[i].color = color;
+			this.props.oncolorchange(c[i]);
+		}
+		debugger;
+	}
 	render(){
 		return (
 			
 			<div>
 			<h3>Course List</h3>
 			<SemesterChoose updateSemester={this.updateSemester.bind(this)}/>
+			<button onClick={this.updateColors.bind(this)}>
+				Auto-Assign Colors
+			</button>
 			<ReactTableResize
 			saveName="CourseList"
 			pageSizeOptions={[5, 10, 20, 25, 50, 100, this.getFilteredCourses().length]}

@@ -120,7 +120,7 @@ class App extends Component {
 	getCourseList(){
 		axios.get(API_URL + "courses")
 		.then(response => {
-			const newCourses = response.data.map( c => {return {sections: c.sections, semester: c.semester, id: c.id, courseName: c.coursename, depId: c.department, shortName: c.shortname, _9: c._9, _10: c._10, _11: c._11, _12: c._12, seatsPerSection: Math.ceil((c._9 + c._10 + c._11 + c._12)/c.sections)}});
+			const newCourses = response.data.map( c => {return {color: c.color, sections: c.sections, semester: c.semester, id: c.id, courseName: c.coursename, depId: c.department, shortName: c.shortname, _9: c._9, _10: c._10, _11: c._11, _12: c._12, seatsPerSection: Math.ceil((c._9 + c._10 + c._11 + c._12)/c.sections)}});
 			this.setState({courses: newCourses});
 			// console.log(newCourses)
 		});
@@ -131,8 +131,17 @@ class App extends Component {
 		delete newObj.depName;
 		newObj.department = newObj.depId;
 		delete newObj.depId;
-		// console.log(newObj)
+		delete newObj.seatsPerSection;
+		console.log(newObj)
 		axios({url: API_URL + "courses/" + cellInfo.original.id, method: 'PUT', data: newObj}).then(res => {this.getCourseList();});
+	}
+	updateCourseColor(courseData){
+		var newObj = Object.assign({}, courseData);
+		delete newObj.depName;
+		newObj.department = newObj.depId;
+		delete newObj.depId;
+		delete newObj.seatsPerSection;
+		axios({url: API_URL + "courses/" + newObj.id, method: "PUT", data: newObj}).then(res => {this.getCourseList()});
 	}
 	deleteCourse(id){
 		console.log("Delet " + id)
@@ -200,7 +209,7 @@ class App extends Component {
 				<DepartmentList departments={this.state.departments} onchecked={this.changeDepartmentChecked.bind(this)} onadd={this.addDepartment.bind(this)} ondelete={this.deleteDepartment.bind(this)} onchange={this.updateDepartment.bind(this)}/>
 				</TabPanel>
 				<TabPanel>
-				<CourseList url={API_URL + "upload/courses"} courses={this.state.courses} departments={this.state.departments} onchange={this.updateCourse.bind(this)} ondelete={this.deleteCourse.bind(this)} onadd={this.addCourse.bind(this)} ondone={this.getCourseList.bind(this)}/>
+				<CourseList url={API_URL + "upload/courses"} courses={this.state.courses} departments={this.state.departments} onchange={this.updateCourse.bind(this)} oncolorchange={this.updateCourseColor.bind(this)} ondelete={this.deleteCourse.bind(this)} onadd={this.addCourse.bind(this)} ondone={this.getCourseList.bind(this)}/>
 				</TabPanel>
 				<TabPanel>
 				<TeacherList url={API_URL + "upload/teachers"} teachers={this.state.teachers} departments={this.state.departments} onchange={this.updateTeacher.bind(this)} onadd={this.addTeacher.bind(this)} ondelete={this.deleteTeacher.bind(this)} ondone={this.getTeacherList.bind(this)}/>

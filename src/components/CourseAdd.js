@@ -31,7 +31,7 @@ class CourseAdd extends React.Component {
 	}
 	render(){
 		var options = this.props.departments.map((obj) => {return {value: obj.id+'', label: obj.name}});
-		console.log(options)
+		//console.log(options)
 		var items = []
 		for (var i = 0; i<options.length; i++){
 			items.push(<option key={options[i].value} value={options[i].value}>{options[i].label}</option> )
