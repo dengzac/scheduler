@@ -23,7 +23,7 @@ router.post('/api/v1/upload/courses', (req, res1, next) => {
 		//console.log(workbook)
 		var data = xlsx.utils.sheet_to_json(workbook.Sheets.Sheet1);
 		console.log(data);
-		data = data.map((o) => [o['Course Code'], o['Department Number'], o['Course Name'], o['Short Name'], o['9th'], o['10th'], o['11th'], o['12th'], o['Semester']]).filter(o => o[0] != null);
+		data = data.map((o) => [o['Course Code'], o['Department Number'], o['Course Name'], o['Short Name'], o['9th'], o['10th'], o['11th'], o['12th'], o['Course Code'].slice(-1) == "A" ? 1 : o['Course Code'].slice(-1) == "B" ? 2 : 3]).filter(o => o[0] != null);
 		console.log(data);
 		var duplicates = [];
 		var badFormat = false;

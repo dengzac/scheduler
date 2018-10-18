@@ -1,5 +1,5 @@
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-
+require('dotenv').config();
 module.exports = (passport) => {
 	passport.serializeUser((user, done) => {
 		done(null, user);
@@ -10,9 +10,9 @@ module.exports = (passport) => {
 	});
 
 	passport.use(new GoogleStrategy({
-		clientID: '826730322175-vp9rkjhimsqepeg0j7gkdvjd5722lecg.apps.googleusercontent.com',
-		clientSecret: 'oNr7dP8ocQacVLWLWhUB0oT5',
-		callbackURL: process.env.HEROKU ? 'https://lowell-scheduler.herokuapp.com/auth/google/callback' : "http://localhost:3000/auth/google/callback"
+		clientID: process.env.GOOGLE_CLIENTID,
+		clientSecret: process.env.GOOGLE_CLIENTSECRET,
+		callbackURL: process.env.HEROKU ? 'https://lowell-scheduler.herokuapp.com/auth/google/callback' : "http://localhost:4000/auth/google/callback"
 	}, 
 	(token, refreshToken, profile,done ) => {
 		return done(null, {

@@ -35,6 +35,10 @@ module.exports = {
 			"/auth": {
 				changeOrigin: true,
 				target: "http://localhost:3000"
+			},
+			"/": {
+				changeOrigin: true,
+				target: "http://localhost:3000"
 			}
 		},
 		contentBase: path.join(__dirname, "public/"),

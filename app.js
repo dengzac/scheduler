@@ -11,6 +11,7 @@ var uploadRouter = require('./routes/upload')
 var cors = require('cors')
 var app = express();
 const passport = require('passport');
+require('dotenv').config();
 const auth = require('./auth')
 const session = require('express-session')
 const pgSession = require('connect-pg-simple')(session);
