@@ -19,6 +19,7 @@ class CourseList extends React.Component {
 		this.renderColor = this.renderColor.bind(this)
 		this.renderCheck = this.renderCheck.bind(this)
 		this.getFilteredCourses = this.getFilteredCourses.bind(this)
+		this.renderSeats = this.renderSeats.bind(this)
 		this.state = {semester: 3};
 	}
 
@@ -123,6 +124,9 @@ class CourseList extends React.Component {
 	renderColor(cellInfo){
 		return (<ColorPicker />)
 	}
+	renderSeats(cellInfo){
+		return <div>{Math.ceil((cellInfo.original._9 + cellInfo.original._10 + cellInfo.original._11 + cellInfo.original._12)/cellInfo.original.sections)}</div>
+	}
 	updateSemester(semester){
 		this.setState({semester: semester});
 		this.forceUpdate();
@@ -147,6 +151,8 @@ class CourseList extends React.Component {
 				{Header: "10th", accessor: "_10", Cell: this.renderEditable},
 				{Header: "11th", accessor: "_11", Cell: this.renderEditable},
 				{Header: "12th", accessor: "_12", Cell: this.renderEditable},
+				{Header: "Sections", accessor: "sections", Cell: this.renderEditable},
+				{Header: "Seats/Section", accessor: "seatspersection", Cell: this.renderSeats},
 				{Header: "Fall", accessor: "fall", Cell: this.renderCheck},
 				{Header: "Spring", accessor: "spring", Cell: this.renderCheck},
 				{Header: "Color", accessor: "color", Cell: this.renderColor},
