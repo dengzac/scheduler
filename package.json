@@ -7,7 +7,8 @@
     "start-dev": "concurrently --kill-others \"webpack -w\" \"npm run start-express\"",
     "build": "webpack --mode development",
     "heroku-postbuild": "npm run build",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "webpack-dev": "concurrently --kill-others \"webpack-dev-server\" \"npm run start-express\""
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -43,6 +44,7 @@
     "react-select": "^2.0.0",
     "react-tabs": "^2.3.0",
     "reactcss": "^1.2.3",
+    "string-similarity": "^2.0.0",
     "xlsx": "^0.13.5"
   },
   "devDependencies": {

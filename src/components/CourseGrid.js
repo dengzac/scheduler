@@ -6,6 +6,9 @@ import Select from 'react-select';
 import SemesterChoose from './SemesterChoose'
 import BlockOptions from "./BlockOptions"
 import "../App.css"
+const stringSimilarity = require('string-similarity')
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 class CourseGrid extends React.Component {
 	constructor(props){
 		super(props);
@@ -14,6 +17,7 @@ class CourseGrid extends React.Component {
 		this.renderBlock = this.renderBlock.bind(this)
 		this.onBlockChange = this.onBlockChange.bind(this)
 		this.state = {semester: 3, properties: []}
+		this.switchSemester = this.switchSemester.bind(this)
 	}
 	renderNonEditable(cellInfo){
 		return (<div style={{backgroundColor: "#fafafa"}}
@@ -32,8 +36,8 @@ class CourseGrid extends React.Component {
 	onBlockChange(cellInfo, target, id, room, seats){
 		var teacherId = this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)[cellInfo.index].id;
 		var courseId = target;// ? target.value : undefined;
-		console.log("BlockChange " + courseId)
-		debugger;
+		//console.log("BlockChange " + courseId)
+		//debugger;
 		var time = cellInfo.column.block;
 
 
@@ -52,6 +56,8 @@ class CourseGrid extends React.Component {
 		}
 		//console.log(options)
 		var block =this.props.blocks.find(o => o.teacher == cellInfo.original.id && o.time == cellInfo.column.Header.slice(-1)); 
+		//if (block) console.log("Re-render")
+		//console.log(block)
 		// if (!this.state.properties[block]){
 		// 	this.setState({properties: (() =>{var a = this.state.properties.splice();a[block] = {}; return a})()});
 		// }
@@ -77,6 +83,32 @@ class CourseGrid extends React.Component {
 		this.setState({semester: semester});
 		this.forceUpdate();
 	}
+	switchSemester(){
+
+		var blocks = this.props.blocks;
+		console.log(blocks)
+		for (var i = 0; i<blocks.length; i++){
+			var origName = blocks[i].course.slice(0, -1);
+			var dept = this.props.teachers.find(a => a.id==blocks[i].teacher).depId;
+			//debugger;
+			var possibleCourses = this.props.courses.filter(o => (o.depId == dept && o.id != blocks[i].course));
+			//console.log(possibleCourses);
+			var res = stringSimilarity.findBestMatch(origName + (blocks[i].course.slice(-1)=="A" ? "B" : "A"), possibleCourses.map(o => o.id));
+			console.log(blocks[i].course + " " + res.bestMatch.target + " " + res.bestMatch.rating);
+			if (res.bestMatch.rating < 0.99){
+				confirmAlert({
+					title: 'Inexact Match Found', 
+					message: "Should " + blocks[i].course + " be replaced by " + res.bestMatch.target + "?",
+					buttons: [{label: 'Yes', onClick: (function(x)  {console.log("Clicked yes");this.props.onchange(res.bestMatch.target, blocks[x].teacher, blocks[x].time, blocks[x].room, blocks[x].id, blocks[x].seats);}).bind(this, i)},
+
+					{label: 'No', onClick: () => {}}]
+				})
+			} else {
+				this.props.onchange(res.bestMatch.target, blocks[i].teacher, blocks[i].time, blocks[i].room, blocks[i].id, blocks[i].seats);
+			}
+		}
+		this.forceUpdate();
+	}
 	render(){
 		var cols = [{Header:'Dept', accessor: 'depId', Cell: this.renderDept},
 					{Header:'Teacher', accessor: 'name', Cell: this.renderNonEditable}]
@@ -84,7 +116,10 @@ class CourseGrid extends React.Component {
 			cols.push({Header:"Block " + i, Cell: this.renderBlock, block: i});
 		}
 		return (
-			<div><SemesterChoose updateSemester={this.updateSemester.bind(this)}/><ReactTableResize
+			<div><SemesterChoose updateSemester={this.updateSemester.bind(this)}/>
+			<button onClick={this.switchSemester.bind(this)}>
+				Swap Course Semester
+			</button><ReactTableResize
 				saveName="CourseGrid"
 				pageSizeOptions={[5, 10, 20, 25, 50, 100, this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked).length]}
 				data={this.props.teachers.filter(o => this.props.departments.find(a => a.id==o.depId).checked)}
