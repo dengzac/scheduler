@@ -40,7 +40,8 @@ function handleCRUD(api_endpoint, params){
 				}
 				else {
 					console.log("Update existing " + req.param('course_id'));
-					await pool.query(`UPDATE blocks SET seats=\'${req.param('seats')}\', course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND time=\'${req.param('time')}\'`);
+					console.log(req.param('time'))
+					await pool.query(`UPDATE blocks SET time=\'${req.param('time')}\', seats=\'${req.param('seats')}\', course_id=\'${req.param('course_id')}\', room=\'${req.param('room')}\' WHERE teacher_id=\'${req.param('teacher_id')}\' AND id=\'${req.param('id')}\'`);
 				}
 			}
 			else{

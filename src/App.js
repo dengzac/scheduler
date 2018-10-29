@@ -11,6 +11,7 @@ import CourseList from "./components/CourseList"
 import TeacherList from "./components/TeacherList"
 import CourseGrid from "./components/CourseGrid"
 import UserList from "./components/UserList"
+import Announcer from "./components/Announcer"
 const API_URL = window.location.protocol + '//' + window.location.host + "/api/v1/"; 
 class App extends Component {
 	state = {
@@ -172,7 +173,7 @@ class App extends Component {
 		this.setState({departments: newArr});
 	}
 	changeBlock(courseId, teacherId, time, room, id, seats){
-		console.log('change block ' + id)
+		console.log('change block ' + id, time)
 		axios.post(API_URL + "blocks", {teacher_id: teacherId, course_id: courseId, room: room, time: time, id: id, seats: seats}).then(res => {this.getBlockList()});
 	}
 	getBlockList(){
@@ -203,6 +204,7 @@ class App extends Component {
 					<Tab>Courses</Tab>
 					<Tab>Teachers</Tab>
 					<Tab>Schedule</Tab>
+					<Tab>Announcer</Tab>
 					<Tab>Users</Tab>
 				</TabList>
 				<TabPanel>
@@ -216,6 +218,9 @@ class App extends Component {
 				</TabPanel>
 				<TabPanel>
 				<CourseGrid onchange={this.changeBlock.bind(this)} courses={this.state.courses} teachers={this.state.teachers} departments={this.state.departments} blocks={this.state.blocks}/>
+				</TabPanel>
+				<TabPanel>
+					<Announcer onchange={this.changeBlock.bind(this)} courses={this.state.courses} teachers={this.state.teachers} blocks={this.state.blocks} departments={this.state.departments}/>
 				</TabPanel>
 				<TabPanel>
 				<UserList onRoleChange={this.updateRoles.bind(this)} ondelete={this.deleteUser.bind(this)} userRoles={this.state.userRoles} users={this.state.users} departments={this.state.departments} roles={this.state.roles} onchange={this.updateUser.bind(this)} onsubmit={this.addUser.bind(this)}/>

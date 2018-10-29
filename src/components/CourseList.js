@@ -123,6 +123,7 @@ class CourseList extends React.Component {
 		}
 	}
 	renderColor(cellInfo){
+		console.log("Render color")
 		return (<ColorPicker color={this.getDisplayedData(this.getFilteredCourses())[cellInfo.index].color} onchange={(newVal) => this.props.onchange(cellInfo, newVal)}/>);
 	}
 	renderSeats(cellInfo){
