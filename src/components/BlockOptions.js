@@ -41,7 +41,7 @@ class BlockOptions extends React.Component {
           defaultValue={this.props.defaultValue}
           value={this.props.defaultValue}
           options={this.props.items}
-          onChange={e => {debugger;
+          onChange={e => {
             //console.log(e.value);
             //console.log(this.props.courses.filter(o => {o.id==e.value}));
             this.setState({course: e ? e.value : undefined,
@@ -69,7 +69,7 @@ class BlockOptions extends React.Component {
               placeholder="Seats"
               value={this.state.seats}
               onChange={e =>
-               {debugger; this.setState({
+               { this.setState({
                   seats: e.target.value
                 }, this.onChange)}
               }

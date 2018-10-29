@@ -87,7 +87,8 @@ class CourseGrid extends React.Component {
 
 		var blocks = this.props.blocks;
 		console.log(blocks)
-		for (var i = 0; i<blocks.length; i++){
+		var confirmQueue = [];
+		for (let i = 0; i<blocks.length; i++){
 			var origName = blocks[i].course.slice(0, -1);
 			var dept = this.props.teachers.find(a => a.id==blocks[i].teacher).depId;
 			//debugger;
@@ -96,17 +97,30 @@ class CourseGrid extends React.Component {
 			var res = stringSimilarity.findBestMatch(origName + (blocks[i].course.slice(-1)=="A" ? "B" : "A"), possibleCourses.map(o => o.id));
 			console.log(blocks[i].course + " " + res.bestMatch.target + " " + res.bestMatch.rating);
 			if (res.bestMatch.rating < 0.99){
-				confirmAlert({
-					title: 'Inexact Match Found', 
-					message: "Should " + blocks[i].course + " be replaced by " + res.bestMatch.target + "?",
-					buttons: [{label: 'Yes', onClick: (function(x)  {console.log("Clicked yes");this.props.onchange(res.bestMatch.target, blocks[x].teacher, blocks[x].time, blocks[x].room, blocks[x].id, blocks[x].seats);}).bind(this, i)},
+				confirmQueue.push({block: blocks[i], match: res.bestMatch.target});
 
-					{label: 'No', onClick: () => {}}]
-				})
 			} else {
 				this.props.onchange(res.bestMatch.target, blocks[i].teacher, blocks[i].time, blocks[i].room, blocks[i].id, blocks[i].seats);
 			}
 		}
+		var that = this;
+		function showAlert(){
+			if (confirmQueue.length <= 0) return;
+			confirmAlert({
+				title: 'Inexact Match Found', 
+				message: "Should " + confirmQueue[0].block.course + " be replaced by " + confirmQueue[0].match + "?",
+				buttons: [{label: 'Yes',
+				 onClick: () =>
+				   {debugger;console.log("Clicked yes", confirmQueue[0]);
+				   that.props.onchange(res.bestMatch.target, confirmQueue[0].block.teacher, confirmQueue[0].block.time, confirmQueue[0].block.room, confirmQueue[0].block.id, confirmQueue[0].block.seats);
+				   confirmQueue.shift();
+				   showAlert();
+				}},
+
+				{label: 'No', onClick: () => {confirmQueue.shift();showAlert()}}]
+			})
+		}
+		showAlert();
 		this.forceUpdate();
 	}
 	render(){
