@@ -34,7 +34,7 @@ class Announcer extends React.Component {
 			style={{backgroundColor: "#fafafa"}}
 			onClick={e =>{
 				//console.log(cellInfo)
-				this.props.ondelete(cellInfo.original.id);
+				this.props.onchange(null, null, null, null, cellInfo.original.id, null);
 			}}
 			dangerouslySetInnerHTML={{
 				__html: 'X'
