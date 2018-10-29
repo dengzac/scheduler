@@ -186,7 +186,7 @@ class CourseList extends React.Component {
 			<CourseAdd onsubmit={this.props.onadd} departments={this.props.departments}/>
 			<h3> Import from Excel </h3>
 			<img src="images/CourseList.png"></img>
-			<p>The above columns, including headers, are required but may be in any order. Other columns will be ignored. For the semester value, 1=Fall only, 2=Spring only, 3=Fall and Spring</p>
+			<p>The above columns, including headers, are required but may be in any order. Other columns will be ignored.</p>
 			<FileUpload url={this.props.url} ondone={this.props.ondone}/>
 			</div>
 			)

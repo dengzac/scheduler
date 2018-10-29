@@ -15,7 +15,20 @@ class FileUpload extends React.Component {
 		data.append('file', this.uploadInput.files[0]);
 		data.append('filename', "test");
 		axios.post(this.props.url, data).then((res) => {
+
 			console.log(res);
+			if (this.props.announcer){
+				if (res.data.length > 0)
+				confirmAlert({
+					title: "Courses not found",
+					message: "The following courses are not in the database: " + JSON.stringify(res.data),
+					buttons: [{label: "Ok", onClick: () => {return new Promise(resolve => setTimeout(resolve, 500)).then(res => {this.props.ondone(); NotificationManager.success("Imported successfully", "Success")})}}]
+				})
+				else {
+					return new Promise(resolve => setTimeout(resolve, 500)).then(res => {this.props.ondone(); NotificationManager.success("Imported successfully", "Success")});
+				}
+			}
+			else{
 			if (res.data.length > 0){
 				confirmAlert({
 					title: "Duplicates found",
@@ -31,7 +44,7 @@ class FileUpload extends React.Component {
 			}
 			else{
 				return new Promise(resolve => setTimeout(resolve, 500)).then(res => { this.props.ondone();NotificationManager.success("Imported successfully", "Success")});
-			}
+			}}
 	});}
 	render(){
 		return (

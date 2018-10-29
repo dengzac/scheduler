@@ -220,7 +220,7 @@ class App extends Component {
 				<CourseGrid onchange={this.changeBlock.bind(this)} courses={this.state.courses} teachers={this.state.teachers} departments={this.state.departments} blocks={this.state.blocks}/>
 				</TabPanel>
 				<TabPanel>
-					<Announcer onchange={this.changeBlock.bind(this)} courses={this.state.courses} teachers={this.state.teachers} blocks={this.state.blocks} departments={this.state.departments}/>
+					<Announcer ondone={this.getBlockList.bind(this)} url={API_URL + "upload/announcer"} onchange={this.changeBlock.bind(this)} courses={this.state.courses} teachers={this.state.teachers} blocks={this.state.blocks} departments={this.state.departments}/>
 				</TabPanel>
 				<TabPanel>
 				<UserList onRoleChange={this.updateRoles.bind(this)} ondelete={this.deleteUser.bind(this)} userRoles={this.state.userRoles} users={this.state.users} departments={this.state.departments} roles={this.state.roles} onchange={this.updateUser.bind(this)} onsubmit={this.addUser.bind(this)}/>

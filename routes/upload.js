@@ -75,4 +75,25 @@ router.post('/api/v1/upload/teachers', (req, res1, next) => {
 	});
 })
 
+router.post('/api/v1/upload/announcer', (req, res1, next) => {
+	var file = req.files.file;
+	file.mv(`${__dirname}/../public/uploads/${file.name}`, res => {
+		var workbook = xlsx.readFile(`${__dirname}/../public/uploads/${file.name}`);
+		var data = xlsx.utils.sheet_to_json(workbook.Sheets.Sheet1);
+		data = data.map(o => [o['Course Code'], o['Room'], o['Block'], o['Seats Cap'], o['Teacher']]).filter(o => o[0] != null);
+		console.log(data);
+		var errors = []
+		const requests = data.map(o => pool.query('INSERT INTO blocks(teacher_id, course_id, room, time, seats) SELECT id, $1, $2, $3, $4 FROM teachers WHERE lastname=$5', o).catch( function(err){
+			if (err){
+				console.log(err);
+				errors.push(o[0])
+			}
+		}));
+		Promise.all(requests).then(() => {
+			console.log("Errors: " + errors)
+			res1.json(errors);
+		})
+	})
+})
+
 module.exports = router;

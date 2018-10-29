@@ -33,18 +33,18 @@ class BlockOptions extends React.Component {
   //     return null;
   // }
   render() {
-    if (this.props.defaultValue){console.log("Render block" , this.props.defaultValue)}
+    if (this.props.defaultValue){console.log("Render block" , this.props.defaultValue)} else console.log('no value')
     return (
       <div style={{backgroundColor: this.props.defaultValue ? "#" + this.props.courses.filter(o => {return o.id==this.props.defaultValue.value})[0].color : "", padding: '10px'}}>
         <Select
           isClearable={true}
-          defaultValue={this.props.defaultValue}
-          value={this.props.defaultValue}
+          defaultValue={this.props.block ? this.props.defaultValue : null}
+          value={this.props.block ? this.props.defaultValue : null}
           options={this.props.items}
           onChange={e => {
             //console.log(e.value);
             //console.log(this.props.courses.filter(o => {o.id==e.value}));
-            this.setState({course: e ? e.value : undefined,
+            this.setState({course: e ? e.value : null,
              selected: e,
               seats: e ? this.props.courses.filter(o => {return o.id==e.value})[0].seatsPerSection : 0},
                this.onChange)}}
